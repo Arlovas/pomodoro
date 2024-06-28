@@ -1,0 +1,42 @@
+Basic:
+    ✔ Create a simple timout decreasing @done(24-03-29 10:06)
+    ✔ Create a start button; @done(24-03-29 14:07)
+    ✔ Create a pause button; @done(24-03-29 14:07)
+    ✔ Create a Reset button; @started(24-03-29 14:07) @done(24-03-29 14:07) @lasted(37s)
+    ✔ Import mono font @done(24-03-29 15:48)
+    ✘ Reset only when confirming; @cancelled(24-03-29 15:48)
+    ✘ Create a rounded clock that decreases when time goes down @cancelled(24-03-29 15:48)
+    ✔ Add shadc cn as ui @done(24-03-29 17:38)
+    ✔ Add icons @done(24-03-31 09:55)
+    ✔ Create notifications when pomodoro finishes @done(24-04-03 18:33)
+    Create a FAQ:
+        ✔ Create the questions and answers @done(24-04-16 13:44)
+        ✔ Fix the close button @done(24-04-16 13:48)
+        ✔ Add a title for the link @done(24-04-16 13:58)
+    ✔ Centralize the pomodoro @done(24-04-16 14:07)
+    Pomodoro settings:
+        ✔ Create a lateral menu (curtain) @done(24-04-18 11:48)
+        ✔ Add input for pomodoro @done(24-04-29 19:23)
+        ✔ Add input for break @done(24-04-29 19:23)
+        Validations:
+            ✔ Input only allow numbers @done(24-04-29 19:23)
+            ✔ Values between 1-59 @done(24-04-29 19:23)
+        ☐ Save settings on the local storage
+    
+    ☐ Create a log of the pomodoros
+    ☐ Create dark / light theme based on user theme
+    ☐ Create an author section
+
+    ☐ Allow log of pomodores do be exported
+    ☐ Allow pomodoro list to be sync with google drive
+    
+    ☐ Have two diferent clock styles one like old airports
+    ☐ Test on mobile
+
+    FIXES:
+        ✔ Reset should reset the sound @done(24-04-03 18:33)
+        ✔ Fix error when building @done(24-04-04 11:21)
+            - Removed the Audio element
+
+style suggestions:
+    https://codepen.io/putraaryotama/pen/wgwqBB
