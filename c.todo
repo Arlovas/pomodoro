@@ -1,3 +1,15 @@
+FIX:
+    ☐ setInterval() when in background can control the time wrong
+    - Seems that the time run slower, due to a background thread
+NEW:
+    ☐ 
+
+
+
+
+
+
+
 Basic:
     ✔ Create a simple timout decreasing @done(24-03-29 10:06)
     ✔ Create a start button; @done(24-03-29 14:07)

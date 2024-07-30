@@ -8,7 +8,7 @@ import { Pause, Play } from 'lucide-react';
 import { NavPomodoro } from './components/NavPomodoro';
 
 // const DEFAULT_POMODORO_TIME: number = 25 * 60; // 25 min in seconds
-const DEFAULT_POMODORO_TIME: number = 1;
+const DEFAULT_POMODORO_TIME: number = 10;
 
 interface PomodoroContextType {
     updatePomodoro: React.Dispatch<React.SetStateAction<number>>;
@@ -21,42 +21,54 @@ export const usePomodoroContext = () => useContext(PomodoroContext);
 
 export default function PomodoroTimer() {
     const audioRef = useRef<HTMLAudioElement>(null);
+    const startTimeRef = useRef(Date.now());
+    const intervalRef = useRef({});
 
-    const [timeLeft, setTimeLeft] = useState(getPomodoroTime());
+    const [timeLeft, setTimeLeft] = useState(0);
     const [isActive, setIsActive] = useState(false);
 
+    useEffect(() => {
+        setTimeLeft(getPomodoroTime());
+    }, []);
+
     function getPomodoroTime(): number {
-        if (typeof window !== 'undefined' && typeof localStorage !== 'undefined') {
-            const customTimer: number = parseInt(localStorage.getItem('ac_pomodoro_timer') ?? '');
-            if (customTimer) return customTimer;
+        const customTimer: number = parseInt(localStorage.getItem('ac_pomodoro_timer') ?? '');
+        if (customTimer) {
+            return customTimer;
         }
+
         return DEFAULT_POMODORO_TIME;
     }
 
-    useEffect(() => {
-        let interval!: ReturnType<typeof setInterval>;
-
-        if (!isActive) {
-            clearInterval(interval);
-            return;
+    function getTimeForScreen(): string {
+        if (timeLeft === null) {
+            return 'n_n';
         }
 
-        interval = setInterval(() => {
-            if (timeLeft === 0) {
-                clearInterval(interval);
-                setIsActive(false);
+        if (isActive || timeLeft > 0) {
+            return formatTimeMinutes(timeLeft);
+        }
 
+        return '00:00';
+    }
+
+    useEffect(() => {
+        if (!isActive) return;
+
+        startTimeRef.current = Date.now();
+        intervalRef.current = setInterval(() => {
+            const elapsedTime = Math.floor((Date.now() - startTimeRef.current) / 1000);
+
+            setTimeLeft(Math.max(timeLeft - elapsedTime, 0));
+
+            if (timeLeft - elapsedTime <= 0) {
                 audioRef.current?.play();
-                return;
+                setTimeLeft(0);
             }
-
-            setTimeLeft(timeLeft - 1);
         }, 1000);
 
-        return () => {
-            clearInterval(interval);
-        }
-    }, [isActive, timeLeft]);
+        return () => clearInterval(intervalRef.current as number);
+    }, [isActive]);
 
     const toggleTimer = () => {
         setIsActive(!isActive);
@@ -64,17 +76,10 @@ export default function PomodoroTimer() {
 
     const resetTimer = () => {
         setIsActive(false);
-        setTimeLeft(DEFAULT_POMODORO_TIME);
+        setTimeLeft(getPomodoroTime());
 
         audioRef.current && (audioRef.current.currentTime = 0);
         audioRef.current?.pause();
-    };
-
-    const handleFormSubmit = (newValue) => {
-        console.log('asd,', newValue)
-        // setMinutes(newValue);
-        // setSeconds(0); // Reset seconds when updating minutes
-        // setIsRunning(false); // Stop the timer if it's running
     };
 
     return (
@@ -86,7 +91,7 @@ export default function PomodoroTimer() {
 
                     <div className='flex flex-col flex-1 center'>
                         <div className={`text-zinc-500 text-9xl font-semibold self-center ${variable.title} pb-8`}>
-                            {formatTimeMinutes(timeLeft)}
+                            {getTimeForScreen()}
                         </div>
                         <div className='flex flex-col items-center gap-8'>
                             <Button className='text-zinc-200' size={'lg'} onClick={toggleTimer}>{
